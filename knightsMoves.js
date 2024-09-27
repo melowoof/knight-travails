@@ -1,4 +1,9 @@
 export function knightMoves(start, end) {
+    
+    if (start[0] < 0 || start[1] > 7 || end[0] < 0 || end[1] > 7) {
+        throw new Error("Invalid: position is out of bounds")
+    }
+    
   const neighborsList = fillAdjacencyList();
   const visited = new Set();
   const parent = new Map();
@@ -22,7 +27,25 @@ export function knightMoves(start, end) {
     });
   }
 
-  return findPath(start, end, parent);
+  const path = findPath(start, end, parent);
+  const pathLength = path.length - 1;
+  const steps = getSteps(path);
+
+  const message = `
+    > knightMoves([${start}],[${end}])
+    => You made it in ${pathLength} moves! Here's your path: 
+    
+    ${steps}`;
+
+  return message;
+}
+
+function getSteps(pathsArray) {
+  let steps = "";
+  while (pathsArray.length > 0) {
+    steps += `[${pathsArray.shift()}]\n    `;
+  }
+  return steps;
 }
 
 function findPath(start, end, parentMap) {
